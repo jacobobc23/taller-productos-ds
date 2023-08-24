@@ -19,7 +19,7 @@ import model.Product;
 public class Main extends javax.swing.JFrame {
 
     private final ProductsManagementController controller;
-
+    
     /**
      * Creates new form Main
      */
@@ -119,6 +119,11 @@ public class Main extends javax.swing.JFrame {
                 "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
             }
         ));
+        productsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(productsTable);
 
         jLabel6.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -322,20 +327,20 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe ingresar todos los datos");
             return;
         }
-        
+
         String code = txtCode.getText().trim();
         String name = txtName.getText().trim();
         String distributor = txtDistributor.getText().trim();
         String category = txtCategory.getText().trim();
         double price = Double.parseDouble(txtPrice.getText());
 
-        Product product = new Product(code, name, distributor, category, price);
-        boolean success = controller.addProduct(product);
-
-        if (success) {
+        try {
+            Product product = new Product(code, name, distributor, category, price);
+            controller.addProduct(product);
+            JOptionPane.showMessageDialog(null, "Producto guardado");
             fillTable();
             clearFields();
-        } else {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al agregar el producto");
         }
     }//GEN-LAST:event_btnAddProductActionPerformed
@@ -370,6 +375,15 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al eliminar el producto");
         }
     }//GEN-LAST:event_btnDeleteProductActionPerformed
+
+    private void productsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsTableMouseClicked
+        int seleccion = productsTable.getSelectedRow();
+        txtCode.setText(productsTable.getValueAt(seleccion, 0).toString());
+        txtName.setText(productsTable.getValueAt(seleccion, 1).toString());
+        txtCategory.setText(productsTable.getValueAt(seleccion, 2).toString());
+        txtDistributor.setText(productsTable.getValueAt(seleccion, 3).toString());
+        txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
+    }//GEN-LAST:event_productsTableMouseClicked
 
     private void fillTable() {
         try {

@@ -79,9 +79,9 @@ public class ProductsManagementController {
      * Agrega un nuevo producto
      *
      * @param product
-     * @return true si se pudo agregar, false en caso contrario
+     * @throws java.sql.SQLException
      */
-    public boolean addProduct(Product product) {
+    public void addProduct(Product product) throws SQLException {
         try {
             PreparedStatement ps;
 
@@ -95,12 +95,12 @@ public class ProductsManagementController {
             ps.setString(4, product.getCategory());
             ps.setDouble(5, product.getPrice());
 
-            int rowInserted = ps.executeUpdate();
+            ps.executeUpdate();
 
-            return rowInserted > 0;
+//            return rowInserted > 0;
         } catch (SQLException ex) {
             System.err.println(ex.toString());
-            return false;
+            throw new SQLException();
         }
     }
 
@@ -114,14 +114,11 @@ public class ProductsManagementController {
         try {
             PreparedStatement ps;
 
-            String query = "UPDATE productos SET nombre = ?, distribuidor = ?, categoria = ?, precio = ? WHERE codigo = ?";
+            String query = "UPDATE productos SET precio = ? WHERE codigo = ?";
 
             ps = con.prepareStatement(query);
-            ps.setString(1, product.getName());
-            ps.setString(2, product.getDistributor());
-            ps.setString(3, product.getCategory());
-            ps.setDouble(4, product.getPrice());
-            ps.setString(5, product.getCode());
+            ps.setDouble(1, product.getPrice());
+            ps.setString(2, product.getCode());
 
             int rowsUpdated = ps.executeUpdate();
 
