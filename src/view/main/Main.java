@@ -19,7 +19,7 @@ import model.Product;
 public class Main extends javax.swing.JFrame {
 
     private final ProductsManagementController controller;
-    
+
     /**
      * Creates new form Main
      */
@@ -30,6 +30,7 @@ public class Main extends javax.swing.JFrame {
         setTitle("Inicio");
         controller = new ProductsManagementController();
         fillTable();
+        setCbxCategory();
     }
 
     /**
@@ -50,7 +51,6 @@ public class Main extends javax.swing.JFrame {
         txtDistributor = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
         txtCode = new javax.swing.JTextField();
-        txtCategory = new javax.swing.JTextField();
         txtPrice = new javax.swing.JTextField();
         btnAddProduct = new javax.swing.JButton();
         btnUpdateProduct = new javax.swing.JButton();
@@ -61,6 +61,8 @@ public class Main extends javax.swing.JFrame {
         txtFilter = new javax.swing.JTextField();
         btnSearchProduct = new javax.swing.JButton();
         btnShowAllProducts = new javax.swing.JButton();
+        btnClean = new javax.swing.JButton();
+        cbxCategory = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,6 +85,18 @@ public class Main extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("PRECIO:");
+
+        txtDistributor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDistributorKeyTyped(evt);
+            }
+        });
+
+        txtPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPriceKeyTyped(evt);
+            }
+        });
 
         btnAddProduct.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         btnAddProduct.setText("Registrar");
@@ -146,6 +160,16 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnClean.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        btnClean.setText("Limpiar");
+        btnClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanActionPerformed(evt);
+            }
+        });
+
+        cbxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         backgroundPanel.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -154,7 +178,6 @@ public class Main extends javax.swing.JFrame {
         backgroundPanel.setLayer(txtDistributor, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(txtCode, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        backgroundPanel.setLayer(txtCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(txtPrice, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(btnAddProduct, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(btnUpdateProduct, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -164,6 +187,8 @@ public class Main extends javax.swing.JFrame {
         backgroundPanel.setLayer(txtFilter, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(btnSearchProduct, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(btnShowAllProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        backgroundPanel.setLayer(btnClean, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        backgroundPanel.setLayer(cbxCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
@@ -188,8 +213,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txtCode)
                     .addComponent(txtName)
                     .addComponent(txtDistributor)
-                    .addComponent(txtCategory)
-                    .addComponent(txtPrice))
+                    .addComponent(txtPrice)
+                    .addComponent(cbxCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -200,7 +225,9 @@ public class Main extends javax.swing.JFrame {
                         .addGap(36, 36, 36)
                         .addComponent(btnSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
-                        .addComponent(btnShowAllProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnShowAllProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(126, 126, 126))
         );
         backgroundPanelLayout.setVerticalGroup(
@@ -214,7 +241,8 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSearchProduct)
-                        .addComponent(btnShowAllProducts))
+                        .addComponent(btnShowAllProducts)
+                        .addComponent(btnClean))
                     .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
@@ -229,7 +257,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
-                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -299,7 +327,7 @@ public class Main extends javax.swing.JFrame {
                 txtCode.setText(rs.getString("codigo"));
                 txtName.setText(rs.getString("nombre"));
                 txtDistributor.setText(rs.getString("distribuidor"));
-                txtCategory.setText(rs.getString("categoria"));
+                cbxCategory.setSelectedItem((rs.getString("categoria")));
                 txtPrice.setText(String.valueOf(rs.getDouble("precio")));
 
             }
@@ -308,7 +336,7 @@ public class Main extends javax.swing.JFrame {
                 txtCode.setText("");
                 txtName.setText("");
                 txtDistributor.setText("");
-                txtCategory.setText("");
+                cbxCategory.setSelectedIndex(0);
                 txtPrice.setText("");
             }
 
@@ -319,7 +347,7 @@ public class Main extends javax.swing.JFrame {
 
     private void btnShowAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllProductsActionPerformed
         fillTable();
-        clearFields();
+        cleanFields();
     }//GEN-LAST:event_btnShowAllProductsActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
@@ -331,7 +359,7 @@ public class Main extends javax.swing.JFrame {
         String code = txtCode.getText().trim();
         String name = txtName.getText().trim();
         String distributor = txtDistributor.getText().trim();
-        String category = txtCategory.getText().trim();
+        String category = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
         try {
@@ -339,7 +367,7 @@ public class Main extends javax.swing.JFrame {
             controller.addProduct(product);
             JOptionPane.showMessageDialog(null, "Producto guardado");
             fillTable();
-            clearFields();
+            cleanFields();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al agregar el producto");
         }
@@ -349,7 +377,7 @@ public class Main extends javax.swing.JFrame {
         String code = txtCode.getText().trim();
         String name = txtName.getText().trim();
         String distributor = txtDistributor.getText().trim();
-        String category = txtCategory.getText().trim();
+        String category = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
         Product product = new Product(code, name, distributor, category, price);
@@ -357,7 +385,7 @@ public class Main extends javax.swing.JFrame {
 
         if (success) {
             fillTable();
-            clearFields();
+            cleanFields();
         } else {
             JOptionPane.showMessageDialog(null, "Error al actualizar el producto");
         }
@@ -370,7 +398,8 @@ public class Main extends javax.swing.JFrame {
 
         if (success) {
             fillTable();
-            clearFields();
+            cleanFields();
+            JOptionPane.showMessageDialog(null, "Producto eliminado correctamente");
         } else {
             JOptionPane.showMessageDialog(null, "Error al eliminar el producto");
         }
@@ -378,12 +407,32 @@ public class Main extends javax.swing.JFrame {
 
     private void productsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsTableMouseClicked
         int seleccion = productsTable.getSelectedRow();
+
         txtCode.setText(productsTable.getValueAt(seleccion, 0).toString());
         txtName.setText(productsTable.getValueAt(seleccion, 1).toString());
-        txtCategory.setText(productsTable.getValueAt(seleccion, 2).toString());
-        txtDistributor.setText(productsTable.getValueAt(seleccion, 3).toString());
+        txtDistributor.setText(productsTable.getValueAt(seleccion, 2).toString());
+        cbxCategory.setSelectedItem(String.valueOf(productsTable.getValueAt(seleccion, 3)));
         txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
     }//GEN-LAST:event_productsTableMouseClicked
+
+    private void txtDistributorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistributorKeyTyped
+        char c = evt.getKeyChar();
+        if (Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDistributorKeyTyped
+
+    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPriceKeyTyped
+
+    private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+        cleanTable();
+        cleanFields();
+    }//GEN-LAST:event_btnCleanActionPerformed
 
     private void fillTable() {
         try {
@@ -420,13 +469,18 @@ public class Main extends javax.swing.JFrame {
     /**
      * Reestablece los valores de búsqueda y limpia los campos de texto.
      */
-    private void clearFields() {
+    private void cleanFields() {
         txtCode.setText("");
         txtName.setText("");
         txtDistributor.setText("");
-        txtCategory.setText("");
+        cbxCategory.setSelectedIndex(0);
         txtPrice.setText("");
         txtFilter.setText("");
+    }
+
+    private void cleanTable() {
+        DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
+        model.setRowCount(0);
     }
 
     /**
@@ -436,7 +490,16 @@ public class Main extends javax.swing.JFrame {
      */
     private boolean hasEmptyFields() {
         return (txtCode.getText().isEmpty() || txtName.getText().isEmpty() || txtDistributor.getText().isEmpty()
-                || txtCategory.getText().isEmpty() || txtPrice.getText().isEmpty());
+                || cbxCategory.getSelectedIndex() == 0 || txtPrice.getText().isEmpty());
+    }
+
+    private void setCbxCategory() {
+
+        cbxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
+            "Zapatos", "Ropa", "Accesorios"
+        }));
+        cbxCategory.insertItemAt("Seleccione una opción", 0);
+        cbxCategory.setSelectedIndex(0);
     }
 
     /**
@@ -475,10 +538,12 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane backgroundPanel;
     private javax.swing.JButton btnAddProduct;
+    private javax.swing.JButton btnClean;
     private javax.swing.JButton btnDeleteProduct;
     private javax.swing.JButton btnSearchProduct;
     private javax.swing.JButton btnShowAllProducts;
     private javax.swing.JButton btnUpdateProduct;
+    private javax.swing.JComboBox<String> cbxCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -487,7 +552,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable productsTable;
-    private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtDistributor;
     private javax.swing.JTextField txtFilter;
