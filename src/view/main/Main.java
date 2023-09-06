@@ -1,12 +1,13 @@
 package view.main;
 
 import controller.ProductsManagementController;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Category;
 import model.Product;
 
 /**
@@ -168,8 +169,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        cbxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         backgroundPanel.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -297,52 +296,33 @@ public class Main extends javax.swing.JFrame {
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
         String code = txtFilter.getText().trim();
 
-        try {
-
-            DefaultTableModel model = new DefaultTableModel();
-            model.setColumnIdentifiers(new Object[]{
-                "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
-            });
-
-            productsTable.setModel(model);
-
-            ResultSet rs = controller.searchProduct(code);
-            ResultSetMetaData rsMd = rs.getMetaData();
-
-            int cantidadColumnas = rsMd.getColumnCount();
-            int anchos[] = {40, 100, 100, 100, 20};
-
-            for (int i = 0; i < productsTable.getColumnCount(); i++) {
-                productsTable.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-            }
-
-            while (rs.next()) {
-
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                model.addRow(filas);
-
-                txtCode.setText(rs.getString("codigo"));
-                txtName.setText(rs.getString("nombre"));
-                txtDistributor.setText(rs.getString("distribuidor"));
-                cbxCategory.setSelectedItem((rs.getString("categoria")));
-                txtPrice.setText(String.valueOf(rs.getDouble("precio")));
-
-            }
-
-            if (code.isEmpty()) {
-                txtCode.setText("");
-                txtName.setText("");
-                txtDistributor.setText("");
-                cbxCategory.setSelectedIndex(0);
-                txtPrice.setText("");
-            }
-
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
+        if (code.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese el código del producto que desea buscar");
+            return;
         }
+
+        DefaultTableModel model = new DefaultTableModel();
+
+        model.setColumnIdentifiers(new Object[]{
+            "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
+        });
+
+        productsTable.setModel(model);
+        Product product = controller.searchProduct(code);
+        if (product != null) {
+            model.addRow(new Object[]{
+                product.getCode(),
+                product.getName(),
+                product.getDistributor(),
+                product.getCategory().getCategoryName(),
+                product.getPrice()
+            });
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Producto no encontrado");
+            fillTable();
+        }
+
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
     private void btnShowAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllProductsActionPerformed
@@ -359,11 +339,20 @@ public class Main extends javax.swing.JFrame {
         String code = txtCode.getText().trim();
         String name = txtName.getText().trim();
         String distributor = txtDistributor.getText().trim();
-        String category = cbxCategory.getSelectedItem().toString();
+        String categoryName = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
+        Category selectedCategory = null;
+
+        for (Category category : controller.getAllCategories()) {
+            if (category.getCategoryName().equals(categoryName)) {
+                selectedCategory = category;
+                break;
+            }
+        }
+
         try {
-            Product product = new Product(code, name, distributor, category, price);
+            Product product = new Product(code, name, distributor, selectedCategory, price);
             controller.addProduct(product);
             JOptionPane.showMessageDialog(null, "Producto guardado");
             fillTable();
@@ -377,10 +366,19 @@ public class Main extends javax.swing.JFrame {
         String code = txtCode.getText().trim();
         String name = txtName.getText().trim();
         String distributor = txtDistributor.getText().trim();
-        String category = cbxCategory.getSelectedItem().toString();
+        String categoryName = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
-        Product product = new Product(code, name, distributor, category, price);
+        Category selectedCategory = null;
+
+        for (Category category : controller.getAllCategories()) {
+            if (category.getCategoryName().equals(categoryName)) {
+                selectedCategory = category;
+                break;
+            }
+        }
+
+        Product product = new Product(code, name, distributor, selectedCategory, price);
         boolean success = controller.updateProduct(product);
 
         if (success) {
@@ -411,7 +409,7 @@ public class Main extends javax.swing.JFrame {
         txtCode.setText(productsTable.getValueAt(seleccion, 0).toString());
         txtName.setText(productsTable.getValueAt(seleccion, 1).toString());
         txtDistributor.setText(productsTable.getValueAt(seleccion, 2).toString());
-        cbxCategory.setSelectedItem(String.valueOf(productsTable.getValueAt(seleccion, 3)));
+        cbxCategory.setSelectedItem((productsTable.getValueAt(seleccion, 3)).toString());
         txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
     }//GEN-LAST:event_productsTableMouseClicked
 
@@ -435,34 +433,23 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCleanActionPerformed
 
     private void fillTable() {
-        try {
+        DefaultTableModel model = new DefaultTableModel();
 
-            DefaultTableModel model = new DefaultTableModel();
-            model.setColumnIdentifiers(new Object[]{
-                "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
+        ArrayList<Product> products = controller.listProducts();
+        model.setColumnIdentifiers(new Object[]{
+            "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
+        });
+
+        productsTable.setModel(model);
+
+        for (Product product : products) {
+            model.addRow(new Object[]{
+                product.getCode(),
+                product.getName(),
+                product.getDistributor(),
+                product.getCategory().getCategoryName(),
+                product.getPrice()
             });
-
-            productsTable.setModel(model);
-
-            ResultSet rs = controller.listProducts();
-            ResultSetMetaData rsMd = rs.getMetaData();
-
-            int cantidadColumnas = rsMd.getColumnCount();
-            int anchos[] = {40, 100, 100, 100, 20};
-
-            for (int i = 0; i < productsTable.getColumnCount(); i++) {
-                productsTable.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-            }
-
-            while (rs.next()) {
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                model.addRow(filas);
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
         }
     }
 
@@ -494,12 +481,15 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void setCbxCategory() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        cbxCategory.setModel(model);
 
-        cbxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
-            "Zapatos", "Ropa", "Accesorios"
-        }));
-        cbxCategory.insertItemAt("Seleccione una opción", 0);
-        cbxCategory.setSelectedIndex(0);
+        ArrayList<Category> categories = controller.getAllCategories();
+        model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
+
+        for (Category category : categories) {
+            model.addElement(category.getCategoryName()); // Agrega los nombres de las categorías al ComboBoxModel
+        }
     }
 
     /**

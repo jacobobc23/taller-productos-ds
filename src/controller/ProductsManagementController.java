@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import connection.BDConnection;
+import java.util.ArrayList;
+import model.Category;
 import model.Product;
 import org.mariadb.jdbc.Connection;
 
@@ -23,12 +25,9 @@ public class ProductsManagementController {
         con = conn.getConnection();
     }
 
-    /**
-     * Devuelve un resultset que contiene todos los productos de la bd
-     *
-     * @return Un resulset que tiene la información de todos los productos
-     */
-    public ResultSet listProducts() {
+    public ArrayList<Product> listProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+
         try {
             PreparedStatement ps;
             ResultSet rs;
@@ -38,11 +37,53 @@ public class ProductsManagementController {
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
 
-            return rs;
+            while (rs.next()) {
+                String code = rs.getString("codigo");
+                String name = rs.getString("nombre");
+                String distribuidor = rs.getString("distribuidor");
+                double price = rs.getDouble("precio");
+                int categoryId = rs.getInt("id_categoria");
+
+                String categoryName = getCategoryNameById(categoryId);
+                Category category = new Category(categoryId, categoryName);
+
+                Product product = new Product(code, name, distribuidor, category, price);
+                products.add(product);
+
+            }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
-        return null;
+        return products;
+    }
+
+    /**
+     * Devuelve un arrayList con todas las categorias disponibles.
+     *
+     * @return
+     */
+    public ArrayList<Category> getAllCategories() {
+        ArrayList<Category> categories = new ArrayList<>();
+
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+
+            String query = "SELECT * FROM categorias";
+
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String categoryName = rs.getString("nombre_categoria");
+                Category category = new Category(id, categoryName);
+                categories.add(category);
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+        return categories;
     }
 
     /**
@@ -52,23 +93,30 @@ public class ProductsManagementController {
      * @return Un resultset que tiene la información del producto buscado. Si el
      * código es vacío, se devuelven todos los productos.
      */
-    public ResultSet searchProduct(String code) {
-        String where = "";
-
-        if (!"".equals(code)) {
-            where = "WHERE codigo = '" + code + "'";
-        }
-
+    public Product searchProduct(String code) {
         try {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT * FROM productos " + where;
+            String query = "SELECT * FROM productos WHERE codigo = ?";
 
             ps = con.prepareStatement(query);
+            ps.setString(1, code);
             rs = ps.executeQuery();
 
-            return rs;
+            if (rs.next()) {
+                String name = rs.getString("nombre");
+                String distribuidor = rs.getString("distribuidor");
+                double price = rs.getDouble("precio");
+                int categoryId = rs.getInt("id_categoria");
+
+                String categoryName = getCategoryNameById(categoryId);
+                Category category = new Category(categoryId, categoryName);
+
+                Product product = new Product(code, name, distribuidor, category, price);
+                
+                return product;
+            }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
@@ -85,15 +133,15 @@ public class ProductsManagementController {
         try {
             PreparedStatement ps;
 
-            String query = "INSERT INTO productos (codigo, nombre, distribuidor, categoria, precio) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO productos (codigo, nombre, distribuidor, precio, id_categoria) VALUES (?, ?, ?, ?, ?)";
 
             ps = con.prepareStatement(query);
 
             ps.setString(1, product.getCode());
             ps.setString(2, product.getName());
             ps.setString(3, product.getDistributor());
-            ps.setString(4, product.getCategory());
-            ps.setDouble(5, product.getPrice());
+            ps.setDouble(4, product.getPrice());
+            ps.setInt(5, product.getCategory().getId());
 
             ps.executeUpdate();
 
@@ -151,5 +199,25 @@ public class ProductsManagementController {
             System.err.println(ex.toString());
             return false;
         }
+    }
+
+    private String getCategoryNameById(int categoryId) {
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+
+            String query = "SELECT nombre_categoria FROM categorias WHERE id = ?";
+
+            ps = con.prepareStatement(query);
+            ps.setInt(1, categoryId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("nombre_categoria");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+        return "Categoría no encontrada";
     }
 }

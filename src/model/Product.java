@@ -10,10 +10,10 @@ public class Product {
     
     private String name;
     private String distributor;
-    private String category;
+    private Category category;
     private double price;
 
-    public Product(String code, String name, String distributor, String category, double price) {
+    public Product(String code, String name, String distributor, Category category, double price) {
         this.code = code;
         this.name = name;
         this.distributor = distributor;
@@ -41,14 +41,14 @@ public class Product {
         this.distributor = distributor;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
-
+    
     public double getPrice() {
         return price;
     }
