@@ -45,7 +45,7 @@ public class ProductsManagementController {
                 int categoryId = rs.getInt("id_categoria");
 
                 String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryId, categoryName);
+                Category category = new Category(categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
                 products.add(product);
@@ -77,7 +77,7 @@ public class ProductsManagementController {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String categoryName = rs.getString("nombreCategoria");
-                Category category = new Category(id, categoryName);
+                Category category = new Category(categoryName);
                 categories.add(category);
             }
         } catch (SQLException ex) {
@@ -111,10 +111,41 @@ public class ProductsManagementController {
                 int categoryId = rs.getInt("id_categoria");
 
                 String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryId, categoryName);
+                Category category = new Category(categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
-                
+
+                return product;
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+        return null;
+    }
+
+    public Product searchProductByCategory(int id) {
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+
+            String query = "SELECT * FROM productos WHERE id_Categoria";
+
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String code = rs.getString("codigo");
+                String name = rs.getString("nombre");
+                String distribuidor = rs.getString("distribuidor");
+                double price = rs.getDouble("precio");
+                int categoryId = rs.getInt("id_categoria");
+
+                String categoryName = getCategoryNameById(categoryId);
+                Category newCategory = new Category(categoryName);
+
+                Product product = new Product(code, name, distribuidor, newCategory, price);
+
                 return product;
             }
         } catch (SQLException ex) {

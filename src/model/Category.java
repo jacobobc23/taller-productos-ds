@@ -6,11 +6,10 @@ package model;
  */
 public class Category {
     
-    private final int id;
+    private int id;
     private final String categoryName;
 
-    public Category(int id, String categoryName) {
-        this.id = id;
+    public Category(String categoryName) {
         this.categoryName = categoryName;
     }
 
