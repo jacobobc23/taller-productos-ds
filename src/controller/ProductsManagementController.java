@@ -76,7 +76,7 @@ public class ProductsManagementController {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String categoryName = rs.getString("nombre_categoria");
+                String categoryName = rs.getString("nombreCategoria");
                 Category category = new Category(id, categoryName);
                 categories.add(category);
             }
@@ -206,14 +206,14 @@ public class ProductsManagementController {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT nombre_categoria FROM categorias WHERE id = ?";
+            String query = "SELECT nombreCategoria FROM categorias WHERE id = ?";
 
             ps = con.prepareStatement(query);
             ps.setInt(1, categoryId);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("nombre_categoria");
+                return rs.getString("nombreCategoria");
             }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
