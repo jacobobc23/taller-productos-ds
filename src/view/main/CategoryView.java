@@ -334,7 +334,6 @@ public class CategoryView extends javax.swing.JFrame {
                     product.getCategory().getCategoryName(),
                     product.getPrice()
                 });
-
             }
 
         } else {
