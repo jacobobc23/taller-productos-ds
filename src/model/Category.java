@@ -9,7 +9,8 @@ public class Category {
     private int id;
     private final String categoryName;
 
-    public Category(String categoryName) {
+    public Category(int id, String categoryName) {
+        this.id = id;
         this.categoryName = categoryName;
     }
 

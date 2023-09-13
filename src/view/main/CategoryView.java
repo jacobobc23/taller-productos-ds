@@ -306,20 +306,11 @@ public class CategoryView extends javax.swing.JFrame {
      */
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
         if (cbxCategory.getSelectedIndex() == 0) {
-        JOptionPane.showMessageDialog(null, "Seleccione una categoria");
-        return;
-        }
-        
-        String nameCategory = cbxSearchCategory.getSelectedItem().toString();
-        
-        int idCategory = cbxSearchCategory.getSelectedIndex() + 1;
-        for (Category category : controller.getAllCategories()) {
-            if (category.getCategoryName().equals(nameCategory)) {
-                idCategory = category.getId();
-                break;
-            }
+            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
+            return;
         }
 
+        int idCategory = cbxSearchCategory.getSelectedIndex();
 
         DefaultTableModel model = new DefaultTableModel();
 
@@ -328,18 +319,22 @@ public class CategoryView extends javax.swing.JFrame {
         });
 
         productsTable.setModel(model);
-        Product product = controller.searchProductByCategory(idCategory);
-        if (product != null) {
-            model.addRow(new Object[]{
-                product.getCode(),
-                product.getName(),
-                product.getDistributor(),
-                product.getCategory().getCategoryName(),
-                product.getPrice()
-            });
+        ArrayList<Product> products = controller.searchProductByCategory(idCategory);
+
+        if (!products.isEmpty()) {
+            for (Product product : products) {
+                model.addRow(new Object[]{
+                    product.getCode(),
+                    product.getName(),
+                    product.getDistributor(),
+                    product.getCategory().getCategoryName(),
+                    product.getPrice()
+                });
+
+            }
 
         } else {
-            JOptionPane.showMessageDialog(null, "Producto no encontrado");
+            JOptionPane.showMessageDialog(null, "Productos no encontrados");
             fillTable();
         }
     }//GEN-LAST:event_btnSearchProductActionPerformed
@@ -427,19 +422,19 @@ public class CategoryView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddProductActionPerformed
 
-    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isDigit(c)) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtPriceKeyTyped
-
     private void txtDistributorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistributorKeyTyped
         char c = evt.getKeyChar();
         if (Character.isDigit(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDistributorKeyTyped
+
+    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPriceKeyTyped
 
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();
