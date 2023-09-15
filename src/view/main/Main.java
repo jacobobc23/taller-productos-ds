@@ -465,12 +465,11 @@ public class Main extends javax.swing.JFrame {
                         product.getCategory().getCategoryName(),
                         product.getPrice()
                     });
-
                 }
 
             } else {
+                
                 JOptionPane.showMessageDialog(null, "Productos no encontrados");
-                fillTable();
             }
         } else {
             fillTable();
