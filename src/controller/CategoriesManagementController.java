@@ -90,15 +90,15 @@ public class CategoriesManagementController {
         }
     }
 
-    public void updateCategory(Category category) throws SQLException {
+    public void updateCategory(int id, String name) throws SQLException {
         try {
             PreparedStatement ps;
 
             String query = "UPDATE categorias SET nombreCategoria = ? WHERE id = ?";
 
             ps = con.prepareStatement(query);
-            ps.setString(1, category.getCategoryName());
-            ps.setInt(2, category.getId());
+            ps.setString(1, name);
+            ps.setInt(2, id);
 
             ps.executeUpdate();
         } catch (SQLException ex) {
