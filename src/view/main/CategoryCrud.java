@@ -250,9 +250,15 @@ public class CategoryCrud extends javax.swing.JFrame {
             return;
         }
 
+        Category category = controller.searchCategory(name);
+        if (category != null) {
+            JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre");
+            return;
+        }
+
         try {
-            Category category = new Category(id, name);
-            controller.addCategory(category);
+            Category newCategory = new Category(id, name);
+            controller.addCategory(newCategory);
             JOptionPane.showMessageDialog(null, "Categoría registrada correctamente");
             fillTable();
             cleanFields();
@@ -262,7 +268,30 @@ public class CategoryCrud extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCategoryActionPerformed
 
     private void btnUpdateCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCategoryActionPerformed
-        // TODO add your handling code here:
+        if (txtName.getText().isEmpty() || txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese todos los datos");
+            return;
+        }
+
+        int id = Integer.parseInt(txtId.getText());
+        String name = txtName.getText();
+
+        Category category = controller.searchCategory(name);
+
+        if (category != null) {
+            JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre");
+            return;
+        }
+
+        try {
+            Category newCategory = new Category(id, name);
+            controller.updateCategory(newCategory);
+            JOptionPane.showMessageDialog(null, "Categoria editada correctamente");
+            fillTable();
+            cleanFields();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al editar la categoría");
+        }
     }//GEN-LAST:event_btnUpdateCategoryActionPerformed
 
     private void btnDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCategoryActionPerformed
@@ -281,7 +310,7 @@ public class CategoryCrud extends javax.swing.JFrame {
                     fillTable();
                     JOptionPane.showMessageDialog(null, "Categoria eliminada correctamente");
                     cleanFields();
-                }catch(ProductCategoryException ex) {
+                } catch (ProductCategoryException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                     cleanFields();
                 }

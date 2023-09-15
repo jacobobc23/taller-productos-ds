@@ -64,6 +64,7 @@ public class Main extends javax.swing.JFrame {
         btnShowAllProducts = new javax.swing.JButton();
         btnClean = new javax.swing.JButton();
         cbxCategory = new javax.swing.JComboBox<>();
+        cbxSearchCategory = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,6 +170,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        cbxSearchCategory.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxSearchCategoryItemStateChanged(evt);
+            }
+        });
+
         backgroundPanel.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -188,6 +195,7 @@ public class Main extends javax.swing.JFrame {
         backgroundPanel.setLayer(btnShowAllProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(btnClean, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(cbxCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        backgroundPanel.setLayer(cbxSearchCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
@@ -215,18 +223,20 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txtPrice)
                     .addComponent(cbxCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(btnSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(btnShowAllProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSearchProduct)
                         .addGap(40, 40, 40)
-                        .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnShowAllProducts)
+                        .addGap(32, 32, 32)
+                        .addComponent(btnClean)))
                 .addGap(126, 126, 126))
         );
         backgroundPanelLayout.setVerticalGroup(
@@ -241,7 +251,8 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSearchProduct)
                         .addComponent(btnShowAllProducts)
-                        .addComponent(btnClean))
+                        .addComponent(btnClean)
+                        .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
@@ -317,7 +328,7 @@ public class Main extends javax.swing.JFrame {
                 product.getCategory().getCategoryName(),
                 product.getPrice()
             });
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "Producto no encontrado");
             fillTable();
@@ -432,6 +443,41 @@ public class Main extends javax.swing.JFrame {
         cleanFields();
     }//GEN-LAST:event_btnShowAllProductsActionPerformed
 
+    private void cbxSearchCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSearchCategoryItemStateChanged
+        if (cbxSearchCategory.getSelectedIndex() != 0) {
+            int idCategory = cbxSearchCategory.getSelectedIndex();
+
+            DefaultTableModel model = new DefaultTableModel();
+
+            model.setColumnIdentifiers(new Object[]{
+                "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
+            });
+
+            productsTable.setModel(model);
+            ArrayList<Product> products = controller.searchProductByCategory(idCategory);
+
+            if (!products.isEmpty()) {
+                for (Product product : products) {
+                    model.addRow(new Object[]{
+                        product.getCode(),
+                        product.getName(),
+                        product.getDistributor(),
+                        product.getCategory().getCategoryName(),
+                        product.getPrice()
+                    });
+
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Productos no encontrados");
+                fillTable();
+            }
+        } else {
+            fillTable();
+        }
+
+    }//GEN-LAST:event_cbxSearchCategoryItemStateChanged
+
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();
 
@@ -483,6 +529,7 @@ public class Main extends javax.swing.JFrame {
     private void setCbxCategory() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxCategory.setModel(model);
+        cbxSearchCategory.setModel(model);
 
         ArrayList<Category> categories = controller.getAllCategories();
         model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
@@ -534,6 +581,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnShowAllProducts;
     private javax.swing.JButton btnUpdateProduct;
     private javax.swing.JComboBox<String> cbxCategory;
+    private javax.swing.JComboBox<String> cbxSearchCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
