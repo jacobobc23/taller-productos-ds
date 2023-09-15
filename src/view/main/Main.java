@@ -1,5 +1,6 @@
 package view.main;
 
+import com.sun.source.tree.BreakTree;
 import controller.ProductsManagementController;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class Main extends javax.swing.JFrame {
         controller = new ProductsManagementController();
         fillTable();
         setCbxCategory();
+        hideLabel();
     }
 
     /**
@@ -65,6 +67,7 @@ public class Main extends javax.swing.JFrame {
         btnClean = new javax.swing.JButton();
         cbxCategory = new javax.swing.JComboBox<>();
         cbxSearchCategory = new javax.swing.JComboBox<>();
+        lblWarning = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -176,6 +179,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        lblWarning.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        lblWarning.setForeground(new java.awt.Color(204, 0, 0));
+        lblWarning.setText("NO SE ENCUENTRAN PRODUCTOS ");
+
         backgroundPanel.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -196,6 +203,7 @@ public class Main extends javax.swing.JFrame {
         backgroundPanel.setLayer(btnClean, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(cbxCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(cbxSearchCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        backgroundPanel.setLayer(lblWarning, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
@@ -223,20 +231,22 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txtPrice)
                     .addComponent(cbxCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(backgroundPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSearchProduct)
-                        .addGap(40, 40, 40)
-                        .addComponent(btnShowAllProducts)
-                        .addGap(32, 32, 32)
-                        .addComponent(btnClean)))
+                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(backgroundPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(33, 33, 33)
+                            .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSearchProduct)
+                            .addGap(40, 40, 40)
+                            .addComponent(btnShowAllProducts)
+                            .addGap(32, 32, 32)
+                            .addComponent(btnClean)))
+                    .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(126, 126, 126))
         );
         backgroundPanelLayout.setVerticalGroup(
@@ -267,20 +277,22 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
-                        .addComponent(cbxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddProduct)
+                            .addComponent(btnUpdateProduct))
+                        .addGap(44, 44, 44)
+                        .addComponent(btnDeleteProduct))
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddProduct)
-                    .addComponent(btnUpdateProduct))
-                .addGap(44, 44, 44)
-                .addComponent(btnDeleteProduct)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblWarning)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -444,6 +456,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowAllProductsActionPerformed
 
     private void cbxSearchCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSearchCategoryItemStateChanged
+
         if (cbxSearchCategory.getSelectedIndex() != 0) {
             int idCategory = cbxSearchCategory.getSelectedIndex();
 
@@ -457,6 +470,7 @@ public class Main extends javax.swing.JFrame {
             ArrayList<Product> products = controller.searchProductByCategory(idCategory);
 
             if (!products.isEmpty()) {
+                hideLabel();
                 for (Product product : products) {
                     model.addRow(new Object[]{
                         product.getCode(),
@@ -464,16 +478,20 @@ public class Main extends javax.swing.JFrame {
                         product.getDistributor(),
                         product.getCategory().getCategoryName(),
                         product.getPrice()
+
                     });
                 }
-
             } else {
-                
+
                 JOptionPane.showMessageDialog(null, "Productos no encontrados");
+                cleanTable();
+                showLabel();
             }
+
         } else {
             fillTable();
         }
+
 
     }//GEN-LAST:event_cbxSearchCategoryItemStateChanged
 
@@ -538,6 +556,14 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
+    private void hideLabel() {
+        lblWarning.setVisible(false);
+    }
+
+    private void showLabel() {
+        lblWarning.setVisible(true);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -552,16 +578,24 @@ public class Main extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -588,6 +622,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblWarning;
     private javax.swing.JTable productsTable;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtDistributor;

@@ -2,8 +2,19 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/controller/ProductsManagementController.java</file>
         </group>
+=======
+<<<<<<< HEAD
+        <group>
+            <file>file:/C:/Users/joanp/OneDrive/Documentos/NetBeansProjects/Taller_Foraneas_03/taller-foraneas/src/connection/BDConnection.java</file>
+            <file>file:/C:/Users/joanp/OneDrive/Documentos/NetBeansProjects/Taller_Foraneas_03/taller-foraneas/src/view/main/CategoryCrud.java</file>
+        </group>
+=======
+        <group/>
+>>>>>>> 53abb3d7ad119b768ae7f125b2060ee93af9e661
+>>>>>>> eaebadba93df4176714f01753b818a26ad8327b2
     </open-files>
 </project-private>
