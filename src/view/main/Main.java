@@ -1,6 +1,5 @@
 package view.main;
 
-import com.sun.source.tree.BreakTree;
 import controller.ProductsManagementController;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ public class Main extends javax.swing.JFrame {
         controller = new ProductsManagementController();
         fillTable();
         setCbxCategory();
+        setCbxSearchCategory();
         hideLabel();
     }
 
@@ -448,6 +448,7 @@ public class Main extends javax.swing.JFrame {
         txtDistributor.setText(productsTable.getValueAt(seleccion, 2).toString());
         cbxCategory.setSelectedItem((productsTable.getValueAt(seleccion, 3)).toString());
         txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
+        cbxSearchCategory.setSelectedIndex(0);
     }//GEN-LAST:event_productsTableMouseClicked
 
     private void txtDistributorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistributorKeyTyped
@@ -570,6 +571,18 @@ public class Main extends javax.swing.JFrame {
     private void setCbxCategory() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxCategory.setModel(model);
+        cbxSearchCategory.setModel(model);
+
+        ArrayList<Category> categories = controller.getAllCategories();
+        model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
+
+        for (Category category : categories) {
+            model.addElement(category.getCategoryName()); // Agrega los nombres de las categorías al ComboBoxModel
+        }
+    }
+
+    private void setCbxSearchCategory() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxSearchCategory.setModel(model);
 
         ArrayList<Category> categories = controller.getAllCategories();

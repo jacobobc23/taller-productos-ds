@@ -32,7 +32,8 @@ public class ProductsManagementController {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT * FROM productos";
+            String query = "SELECT productos.codigo, productos.nombre, productos.distribuidor, productos.precio, productos.id_categoria,"
+                    + " categorias.nombreCategoria FROM productos JOIN categorias ON productos.id_categoria = categorias.id";
 
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
@@ -43,8 +44,8 @@ public class ProductsManagementController {
                 String distribuidor = rs.getString("distribuidor");
                 double price = rs.getDouble("precio");
                 int categoryId = rs.getInt("id_categoria");
+                String categoryName = rs.getString("nombreCategoria");
 
-                String categoryName = getCategoryNameById(categoryId);
                 Category category = new Category(categoryId, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
@@ -98,7 +99,8 @@ public class ProductsManagementController {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT * FROM productos WHERE codigo = ?";
+            String query = "SELECT productos.codigo, productos.nombre, productos.distribuidor, productos.precio, productos.id_categoria,"
+                    + " categorias.nombreCategoria FROM productos JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.codigo = ?";
 
             ps = con.prepareStatement(query);
             ps.setString(1, code);
@@ -109,8 +111,8 @@ public class ProductsManagementController {
                 String distribuidor = rs.getString("distribuidor");
                 double price = rs.getDouble("precio");
                 int categoryId = rs.getInt("id_categoria");
+                String categoryName = rs.getString("nombreCategoria");
 
-                String categoryName = getCategoryNameById(categoryId);
                 Category category = new Category(categoryId, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
@@ -130,7 +132,8 @@ public class ProductsManagementController {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT * FROM productos WHERE id_categoria = ?";
+            String query = "SELECT productos.codigo, productos.nombre, productos.distribuidor, productos.precio, categorias.nombreCategoria"
+                    + " FROM productos JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id_categoria = ?";
 
             ps = con.prepareStatement(query);
             ps.setInt(1, id);
@@ -141,10 +144,9 @@ public class ProductsManagementController {
                 String name = rs.getString("nombre");
                 String distribuidor = rs.getString("distribuidor");
                 double price = rs.getDouble("precio");
-                int categoryId = rs.getInt("id_categoria");
+                String categoryName = rs.getString("nombreCategoria");
 
-                String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryId, categoryName);
+                Category category = new Category(id, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
                 products.add(product);
@@ -178,7 +180,6 @@ public class ProductsManagementController {
 
             ps.executeUpdate();
 
-//            return rowInserted > 0;
         } catch (SQLException ex) {
             System.err.println(ex.toString());
             throw new SQLException();
@@ -232,25 +233,5 @@ public class ProductsManagementController {
             System.err.println(ex.toString());
             return false;
         }
-    }
-
-    private String getCategoryNameById(int categoryId) {
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
-
-            String query = "SELECT nombreCategoria FROM categorias WHERE id = ?";
-
-            ps = con.prepareStatement(query);
-            ps.setInt(1, categoryId);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("nombreCategoria");
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
-        }
-        return "Categoría no encontrada";
     }
 }

@@ -7,7 +7,6 @@ import exceptions.ProductCategoryException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Category;
-import model.Product;
 import org.mariadb.jdbc.Connection;
 
 /**
@@ -54,15 +53,17 @@ public class CategoriesManagementController {
             PreparedStatement ps;
             ResultSet rs;
 
-            String query = "SELECT * FROM categorias WHERE nombreCategoria = ?";
+            String query = "SELECT id, nombreCategoria FROM categorias WHERE nombreCategoria = ?";
 
             ps = con.prepareStatement(query);
             ps.setString(1, name);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                int id = getIdCategoryByName(name);
-                Category category = new Category(id, name);
+                int id = rs.getInt("id");
+                String categoryName = rs.getString("nombreCategoria");
+
+                Category category = new Category(id, categoryName);
 
                 return category;
             }
@@ -108,97 +109,22 @@ public class CategoriesManagementController {
     }
 
     public void deleteCategory(int id) {
-        ArrayList<Product> products = getProducts();
-        
-        for (Product product : products) {
-            if (product.getCategory().getId() == id) {
-                throw new ProductCategoryException();
-            }
-        }
-        
         try {
             PreparedStatement ps;
 
-            String query = "DELETE FROM categorias WHERE id = ?";
+            String query = "DELETE FROM categorias WHERE id = ? AND NOT EXISTS (SELECT 1 FROM productos WHERE id_categoria = ?)";
 
             ps = con.prepareStatement(query);
             ps.setInt(1, id);
+            ps.setInt(2, id);
 
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
-        }
-    }
+            int rowsDeleted = ps.executeUpdate();
 
-    private int getIdCategoryByName(String name) {
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
-
-            String query = "SELECT id FROM categorias WHERE nombreCategoria = ?";
-
-            ps = con.prepareStatement(query);
-            ps.setString(1, name);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id");
+            if (rowsDeleted == 0) {
+                throw new ProductCategoryException();
             }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
-        return -1;
-    }
-
-    private ArrayList<Product> getProducts() {
-        ArrayList<Product> products = new ArrayList<>();
-
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
-
-            String query = "SELECT * FROM productos";
-
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String code = rs.getString("codigo");
-                String name = rs.getString("nombre");
-                String distribuidor = rs.getString("distribuidor");
-                double price = rs.getDouble("precio");
-                int categoryId = rs.getInt("id_categoria");
-
-                String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryId, categoryName);
-
-                Product product = new Product(code, name, distribuidor, category, price);
-                products.add(product);
-
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
-        }
-        return products;
-    }
-
-    private String getCategoryNameById(int categoryId) {
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
-
-            String query = "SELECT nombreCategoria FROM categorias WHERE id = ?";
-
-            ps = con.prepareStatement(query);
-            ps.setInt(1, categoryId);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("nombreCategoria");
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
-        }
-        return "Categoría no encontrada";
     }
 }
