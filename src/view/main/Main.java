@@ -483,7 +483,6 @@ public class Main extends javax.swing.JFrame {
                 }
             } else {
 
-                JOptionPane.showMessageDialog(null, "Productos no encontrados");
                 cleanTable();
                 showLabel();
             }
