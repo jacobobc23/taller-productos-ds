@@ -325,11 +325,6 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
-    private void btnShowAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllProductsActionPerformed
-        fillTable();
-        cleanFields();
-    }//GEN-LAST:event_btnShowAllProductsActionPerformed
-
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
         if (hasEmptyFields()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar todos los datos");
@@ -431,6 +426,11 @@ public class Main extends javax.swing.JFrame {
         cleanTable();
         cleanFields();
     }//GEN-LAST:event_btnCleanActionPerformed
+
+    private void btnShowAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllProductsActionPerformed
+        fillTable();
+        cleanFields();
+    }//GEN-LAST:event_btnShowAllProductsActionPerformed
 
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();

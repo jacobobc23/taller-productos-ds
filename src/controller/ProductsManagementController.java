@@ -45,7 +45,7 @@ public class ProductsManagementController {
                 int categoryId = rs.getInt("id_categoria");
 
                 String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryName);
+                Category category = new Category(categoryId, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
                 products.add(product);
@@ -77,7 +77,7 @@ public class ProductsManagementController {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String categoryName = rs.getString("nombreCategoria");
-                Category category = new Category(categoryName);
+                Category category = new Category(id, categoryName);
                 categories.add(category);
             }
         } catch (SQLException ex) {
@@ -111,7 +111,7 @@ public class ProductsManagementController {
                 int categoryId = rs.getInt("id_categoria");
 
                 String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryName);
+                Category category = new Category(categoryId, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
 
@@ -144,7 +144,7 @@ public class ProductsManagementController {
                 int categoryId = rs.getInt("id_categoria");
 
                 String categoryName = getCategoryNameById(categoryId);
-                Category category = new Category(categoryName);
+                Category category = new Category(categoryId, categoryName);
 
                 Product product = new Product(code, name, distribuidor, category, price);
                 products.add(product);

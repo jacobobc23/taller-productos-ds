@@ -310,10 +310,7 @@ public class CategoryView extends javax.swing.JFrame {
             return;
         }
 
-        String nameCategory = cbxSearchCategory.getSelectedItem().toString();
-
         int idCategory = cbxSearchCategory.getSelectedIndex();
-        System.out.println(idCategory);
 
         DefaultTableModel model = new DefaultTableModel();
 
@@ -322,7 +319,6 @@ public class CategoryView extends javax.swing.JFrame {
         });
 
         productsTable.setModel(model);
-        System.out.println("Este es el id antes del controlador " + idCategory);
         ArrayList<Product> products = controller.searchProductByCategory(idCategory);
 
         if (!products.isEmpty()) {
@@ -425,19 +421,19 @@ public class CategoryView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddProductActionPerformed
 
-    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isDigit(c)) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtPriceKeyTyped
-
     private void txtDistributorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistributorKeyTyped
         char c = evt.getKeyChar();
         if (Character.isDigit(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDistributorKeyTyped
+
+    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPriceKeyTyped
 
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();
