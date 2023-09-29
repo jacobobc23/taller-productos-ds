@@ -511,8 +511,6 @@ public class Main extends javax.swing.JFrame {
             fillTable();
             hideLabel();
         }
-
-
     }//GEN-LAST:event_cbxSearchCategoryItemStateChanged
 
     private void lblCategoriesManagementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCategoriesManagementMouseClicked
