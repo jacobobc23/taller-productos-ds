@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/view/main/Main.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>471</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group/>
+=======
+<<<<<<< HEAD
+        <group/>
+=======
+        <group>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/controller/ProductsManagementController.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/view/main/Main.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/view/main/CategoryCrud.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/controller/CategoriesManagementController.java</file>
+        </group>
+>>>>>>> 65ac54e2c3872010bdb01b3a376b209851260246
+>>>>>>> 41f951f4e5f755d0379cfb48c4d91d1ec7ff0ded
     </open-files>
 </project-private>

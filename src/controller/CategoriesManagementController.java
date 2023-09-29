@@ -2,12 +2,12 @@ package controller;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import connection.BDConnection;
 import exceptions.ProductCategoryException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Category;
 import org.mariadb.jdbc.Connection;
+import singleton.Singleton;
 
 /**
  *
@@ -15,12 +15,10 @@ import org.mariadb.jdbc.Connection;
  */
 public class CategoriesManagementController {
 
-    private final BDConnection conn;
     private final Connection con;
 
     public CategoriesManagementController() {
-        conn = new BDConnection();
-        con = conn.getConnection();
+        con = Singleton.getINSTANCE().getConnection();
     }
 
     public ArrayList<Category> listCategories() {
