@@ -50,8 +50,7 @@ public class CategoryCrud extends javax.swing.JFrame {
         btnSearchCategory = new javax.swing.JButton();
         btnShowAllCategories = new javax.swing.JButton();
         btnClean = new javax.swing.JButton();
-        txtId = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        btnReturn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,9 +128,14 @@ public class CategoryCrud extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("ID:");
+        btnReturn.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        btnReturn.setText("Volver");
+        btnReturn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnActionPerformed(evt);
+            }
+        });
 
         jDesktopPane1.setLayer(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -144,8 +148,7 @@ public class CategoryCrud extends javax.swing.JFrame {
         jDesktopPane1.setLayer(btnSearchCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnShowAllCategories, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnClean, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(txtId, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnReturn, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -164,12 +167,10 @@ public class CategoryCrud extends javax.swing.JFrame {
                                 .addGap(57, 57, 57)
                                 .addComponent(btnDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
+                        .addGap(67, 67, 67)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
@@ -184,37 +185,37 @@ public class CategoryCrud extends javax.swing.JFrame {
                         .addComponent(btnClean))
                     .addComponent(jScrollPane1))
                 .addGap(72, 72, 72))
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearchCategory)
+                    .addComponent(btnShowAllCategories)
+                    .addComponent(btnClean))
+                .addGap(15, 15, 15)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchCategory)
-                            .addComponent(btnShowAllCategories)
-                            .addComponent(btnClean))
-                        .addGap(15, 15, 15)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(45, 45, 45)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAddCategory)
                             .addComponent(btnUpdateCategory))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteCategory)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                        .addComponent(btnDeleteCategory))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(btnReturn)
+                .addGap(22, 22, 22))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -243,9 +244,8 @@ public class CategoryCrud extends javax.swing.JFrame {
 
     private void btnAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCategoryActionPerformed
         String name = txtName.getText();
-        int id = Integer.parseInt(txtId.getText());
 
-        if (name.isEmpty() || txtId.getText().isEmpty()) {
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese el nombre de la categoría");
             return;
         }
@@ -257,7 +257,7 @@ public class CategoryCrud extends javax.swing.JFrame {
         }
 
         try {
-            Category newCategory = new Category(id, name);
+            Category newCategory = new Category(name);
             controller.addCategory(newCategory);
             JOptionPane.showMessageDialog(null, "Categoría registrada correctamente");
             fillTable();
@@ -268,30 +268,30 @@ public class CategoryCrud extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCategoryActionPerformed
 
     private void btnUpdateCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCategoryActionPerformed
-        if (txtName.getText().isEmpty() || txtId.getText().isEmpty()) {
+        if (txtName.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ingrese todos los datos");
             return;
         }
 
-        int id = Integer.parseInt(txtId.getText());
         String name = txtName.getText();
 
-        Category category = controller.searchCategory(name);
+        int selected = categoriesTable.getSelectedRow();
 
-        if (category != null) {
-            JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre");
-            return;
+        if (selected >= 0) {
+            int id = (int) categoriesTable.getModel().getValueAt(selected, 0);
+
+            try {
+                controller.updateCategory(id, name);
+                JOptionPane.showMessageDialog(null, "Categoria editada correctamente");
+                fillTable();
+                cleanFields();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al editar la categoría");
+            }
+
         }
 
-        try {
-            Category newCategory = new Category(id, name);
-            controller.updateCategory(newCategory);
-            JOptionPane.showMessageDialog(null, "Categoria editada correctamente");
-            fillTable();
-            cleanFields();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al editar la categoría");
-        }
+
     }//GEN-LAST:event_btnUpdateCategoryActionPerformed
 
     private void btnDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCategoryActionPerformed
@@ -352,9 +352,13 @@ public class CategoryCrud extends javax.swing.JFrame {
     private void categoriesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categoriesTableMouseClicked
         int selected = categoriesTable.getSelectedRow();
 
-        txtId.setText(categoriesTable.getValueAt(selected, 0).toString());
         txtName.setText(categoriesTable.getValueAt(selected, 1).toString());
     }//GEN-LAST:event_categoriesTableMouseClicked
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        new Main().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnReturnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -380,7 +384,6 @@ public class CategoryCrud extends javax.swing.JFrame {
 
     private void cleanFields() {
         txtName.setText("");
-        txtId.setText("");
         txtFilter.setText("");
     }
 
@@ -389,40 +392,11 @@ public class CategoryCrud extends javax.swing.JFrame {
         model.setRowCount(0);
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CategoryCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CategoryCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CategoryCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CategoryCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new CategoryCrud().setVisible(true);
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCategory;
     private javax.swing.JButton btnClean;
     private javax.swing.JButton btnDeleteCategory;
+    private javax.swing.JButton btnReturn;
     private javax.swing.JButton btnSearchCategory;
     private javax.swing.JButton btnShowAllCategories;
     private javax.swing.JButton btnUpdateCategory;
@@ -430,10 +404,8 @@ public class CategoryCrud extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtFilter;
-    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }

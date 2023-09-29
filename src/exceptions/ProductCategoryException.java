@@ -6,6 +6,6 @@ package exceptions;
  */
 public class ProductCategoryException extends RuntimeException {
     public ProductCategoryException() {
-        super ("No se puede eliminar una categoría ya asignada a un producto");
+        super ("No se puede eliminar la categoría porque hay productos asociados a ella.");
     }
 }

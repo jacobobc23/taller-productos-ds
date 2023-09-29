@@ -1,6 +1,5 @@
 package view.main;
 
-import com.sun.source.tree.BreakTree;
 import controller.ProductsManagementController;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ public class Main extends javax.swing.JFrame {
         controller = new ProductsManagementController();
         fillTable();
         setCbxCategory();
+        setCbxSearchCategory();
         hideLabel();
     }
 
@@ -68,6 +68,7 @@ public class Main extends javax.swing.JFrame {
         cbxCategory = new javax.swing.JComboBox<>();
         cbxSearchCategory = new javax.swing.JComboBox<>();
         lblWarning = new javax.swing.JLabel();
+        lblCategoriesManagement = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,6 +184,16 @@ public class Main extends javax.swing.JFrame {
         lblWarning.setForeground(new java.awt.Color(204, 0, 0));
         lblWarning.setText("NO SE ENCUENTRAN PRODUCTOS ");
 
+        lblCategoriesManagement.setFont(new java.awt.Font("sansserif", 0, 12)); // NOI18N
+        lblCategoriesManagement.setForeground(new java.awt.Color(153, 153, 153));
+        lblCategoriesManagement.setText("Gestionar");
+        lblCategoriesManagement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblCategoriesManagement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCategoriesManagementMouseClicked(evt);
+            }
+        });
+
         backgroundPanel.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -204,6 +215,7 @@ public class Main extends javax.swing.JFrame {
         backgroundPanel.setLayer(cbxCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(cbxSearchCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
         backgroundPanel.setLayer(lblWarning, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        backgroundPanel.setLayer(lblCategoriesManagement, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
@@ -231,7 +243,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txtPrice)
                     .addComponent(cbxCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblWarning, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(backgroundPanelLayout.createSequentialGroup()
@@ -239,14 +252,19 @@ public class Main extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(33, 33, 33)
-                            .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSearchProduct)
-                            .addGap(40, 40, 40)
-                            .addComponent(btnShowAllProducts)
-                            .addGap(32, 32, 32)
-                            .addComponent(btnClean)))
-                    .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(backgroundPanelLayout.createSequentialGroup()
+                                    .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnSearchProduct)
+                                    .addGap(40, 40, 40)
+                                    .addComponent(btnShowAllProducts)
+                                    .addGap(32, 32, 32)
+                                    .addComponent(btnClean))
+                                .addGroup(backgroundPanelLayout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(lblCategoriesManagement)
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
                 .addGap(126, 126, 126))
         );
         backgroundPanelLayout.setVerticalGroup(
@@ -264,9 +282,9 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(btnClean)
                         .addComponent(cbxSearchCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -289,7 +307,8 @@ public class Main extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(btnDeleteProduct))
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addComponent(lblCategoriesManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblWarning)))
@@ -429,6 +448,7 @@ public class Main extends javax.swing.JFrame {
         txtDistributor.setText(productsTable.getValueAt(seleccion, 2).toString());
         cbxCategory.setSelectedItem((productsTable.getValueAt(seleccion, 3)).toString());
         txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
+        cbxSearchCategory.setSelectedIndex(0);
     }//GEN-LAST:event_productsTableMouseClicked
 
     private void txtDistributorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistributorKeyTyped
@@ -480,19 +500,25 @@ public class Main extends javax.swing.JFrame {
                         product.getPrice()
 
                     });
-
                 }
             } else {
+
                 cleanTable();
                 showLabel();
             }
 
         } else {
             fillTable();
+            hideLabel();
         }
 
 
     }//GEN-LAST:event_cbxSearchCategoryItemStateChanged
+
+    private void lblCategoriesManagementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCategoriesManagementMouseClicked
+        new CategoryCrud().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblCategoriesManagementMouseClicked
 
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();
@@ -545,6 +571,18 @@ public class Main extends javax.swing.JFrame {
     private void setCbxCategory() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxCategory.setModel(model);
+        cbxSearchCategory.setModel(model);
+
+        ArrayList<Category> categories = controller.getAllCategories();
+        model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
+
+        for (Category category : categories) {
+            model.addElement(category.getCategoryName()); // Agrega los nombres de las categorías al ComboBoxModel
+        }
+    }
+
+    private void setCbxSearchCategory() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxSearchCategory.setModel(model);
 
         ArrayList<Category> categories = controller.getAllCategories();
@@ -621,6 +659,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCategoriesManagement;
     private javax.swing.JLabel lblWarning;
     private javax.swing.JTable productsTable;
     private javax.swing.JTextField txtCode;

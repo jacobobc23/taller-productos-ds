@@ -11,6 +11,15 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group/>
+=======
+        <group>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/controller/ProductsManagementController.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/view/main/Main.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/view/main/CategoryCrud.java</file>
+            <file>file:/C:/Users/Jacobo-bc/Documents/01_universidad/04_semestre/01_diseñoDeSoftware/01_corte/01_taller-productos/src/controller/CategoriesManagementController.java</file>
+        </group>
+>>>>>>> 65ac54e2c3872010bdb01b3a376b209851260246
     </open-files>
 </project-private>
