@@ -3,11 +3,11 @@ package controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import connection.BDConnection;
 import java.util.ArrayList;
 import model.Category;
 import model.Product;
 import org.mariadb.jdbc.Connection;
+import singleton.Singleton;
 
 /**
  * Esta clase maneja la gestión de los productos, tiene los métodos para listar
@@ -17,12 +17,10 @@ import org.mariadb.jdbc.Connection;
  */
 public class ProductsManagementController {
 
-    private final BDConnection conn;
     private final Connection con;
 
     public ProductsManagementController() {
-        conn = new BDConnection();
-        con = conn.getConnection();
+        con = Singleton.getINSTANCE().getConnection();
     }
 
     public ArrayList<Product> listProducts() {
