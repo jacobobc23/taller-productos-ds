@@ -16,7 +16,7 @@ import org.mariadb.jdbc.Connection;
  */
 public class DBConnection {
 
-    private static final String URL = "jdbc:mariadb://localhost:3306/db_products";
+    private static final String URL = "jdbc:mariadb://localhost:3306/ds_taller1";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
