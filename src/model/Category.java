@@ -2,28 +2,28 @@ package model;
 
 /**
  *
- * @author Jacobo-bc
+ * @author jacobobc
  */
 public class Category {
     
     private int id;
-    private final String categoryName;
+    private final String name;
 
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
+    public Category(String name) {
+        this.name = name;
     }
     
-    public Category(int id, String categoryName) {
+    public Category(int id, String name) {
         this.id = id;
-        this.categoryName = categoryName;
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
 }

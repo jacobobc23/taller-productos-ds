@@ -2,7 +2,7 @@ package model;
 
 /**
  *
- * @author Jacobo-bc
+ * @author jacobobc
  */
 public class Product {
     

@@ -2,7 +2,7 @@ package exceptions;
 
 /**
  *
- * @author Jacobo-bc
+ * @author jacobobc
  */
 public class ProductCategoryException extends RuntimeException {
     public ProductCategoryException() {

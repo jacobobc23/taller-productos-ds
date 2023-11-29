@@ -1,6 +1,6 @@
 package view.main;
 
-import controller.ProductsManagementController;
+import controller.ProductsController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -11,15 +11,12 @@ import model.Category;
 import model.Product;
 
 /**
- * Interfaz gráfica principal para la gestión de productos, la cuál contiene
- * métodos para la visualización, búsqueda, actualización y eliminación de
- * productos.
  *
- * @author Jacobo-bc
+ * @author jacobobc
  */
 public class Main extends javax.swing.JFrame {
 
-    private final ProductsManagementController controller;
+    private final ProductsController controller;
 
     /**
      * Creates new form Main
@@ -29,11 +26,11 @@ public class Main extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setTitle("Inicio");
-        controller = new ProductsManagementController();
-        fillTable();
+        controller = new ProductsController();
+        fillProductsTable();
         setCbxCategory();
-        setCbxSearchCategory();
-        hideLabel();
+        setCbxCategoryFilter();
+        hideWarnings();
     }
 
     /**
@@ -329,12 +326,6 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * Realiza una búsqueda en la bd con el código proporcionado, para así
-     * actualizar la tabla y los campos de textos.
-     *
-     * @param evt
-     */
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
         String code = txtFilter.getText().trim();
 
@@ -350,19 +341,19 @@ public class Main extends javax.swing.JFrame {
         });
 
         productsTable.setModel(model);
-        Product product = controller.searchProduct(code);
+        Product product = controller.selectProduct(code);
         if (product != null) {
             model.addRow(new Object[]{
                 product.getCode(),
                 product.getName(),
                 product.getDistributor(),
-                product.getCategory().getCategoryName(),
+                product.getCategory().getName(),
                 product.getPrice()
             });
 
         } else {
             JOptionPane.showMessageDialog(null, "Producto no encontrado");
-            fillTable();
+            fillProductsTable();
         }
 
     }//GEN-LAST:event_btnSearchProductActionPerformed
@@ -379,20 +370,20 @@ public class Main extends javax.swing.JFrame {
         String categoryName = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
-        Category selectedCategory = null;
+        Category category = null;
 
-        for (Category category : controller.getAllCategories()) {
-            if (category.getCategoryName().equals(categoryName)) {
-                selectedCategory = category;
+        for (Category i : controller.listAllCategories()) {
+            if (i.getName().equals(categoryName)) {
+                category = i;
                 break;
             }
         }
 
         try {
-            Product product = new Product(code, name, distributor, selectedCategory, price);
+            Product product = new Product(code, name, distributor, category, price);
             controller.addProduct(product);
             JOptionPane.showMessageDialog(null, "Producto guardado");
-            fillTable();
+            fillProductsTable();
             cleanFields();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al agregar el producto");
@@ -406,20 +397,20 @@ public class Main extends javax.swing.JFrame {
         String categoryName = cbxCategory.getSelectedItem().toString();
         double price = Double.parseDouble(txtPrice.getText());
 
-        Category selectedCategory = null;
+        Category category = null;
 
-        for (Category category : controller.getAllCategories()) {
-            if (category.getCategoryName().equals(categoryName)) {
-                selectedCategory = category;
+        for (Category i : controller.listAllCategories()) {
+            if (i.getName().equals(categoryName)) {
+                category = i;
                 break;
             }
         }
 
-        Product product = new Product(code, name, distributor, selectedCategory, price);
+        Product product = new Product(code, name, distributor, category, price);
         boolean success = controller.updateProduct(product);
 
         if (success) {
-            fillTable();
+            fillProductsTable();
             cleanFields();
         } else {
             JOptionPane.showMessageDialog(null, "Error al actualizar el producto");
@@ -432,7 +423,7 @@ public class Main extends javax.swing.JFrame {
         boolean success = controller.deleteProduct(code);
 
         if (success) {
-            fillTable();
+            fillProductsTable();
             cleanFields();
             JOptionPane.showMessageDialog(null, "Producto eliminado correctamente");
         } else {
@@ -441,13 +432,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     private void productsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsTableMouseClicked
-        int seleccion = productsTable.getSelectedRow();
+        int selected = productsTable.getSelectedRow();
 
-        txtCode.setText(productsTable.getValueAt(seleccion, 0).toString());
-        txtName.setText(productsTable.getValueAt(seleccion, 1).toString());
-        txtDistributor.setText(productsTable.getValueAt(seleccion, 2).toString());
-        cbxCategory.setSelectedItem((productsTable.getValueAt(seleccion, 3)).toString());
-        txtPrice.setText(productsTable.getValueAt(seleccion, 4).toString());
+        txtCode.setText(productsTable.getValueAt(selected, 0).toString());
+        txtName.setText(productsTable.getValueAt(selected, 1).toString());
+        txtDistributor.setText(productsTable.getValueAt(selected, 2).toString());
+        cbxCategory.setSelectedItem((productsTable.getValueAt(selected, 3)).toString());
+        txtPrice.setText(productsTable.getValueAt(selected, 4).toString());
         cbxSearchCategory.setSelectedIndex(0);
     }//GEN-LAST:event_productsTableMouseClicked
 
@@ -471,14 +462,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCleanActionPerformed
 
     private void btnShowAllProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllProductsActionPerformed
-        fillTable();
+        fillProductsTable();
         cleanFields();
     }//GEN-LAST:event_btnShowAllProductsActionPerformed
 
     private void cbxSearchCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSearchCategoryItemStateChanged
-
         if (cbxSearchCategory.getSelectedIndex() != 0) {
-            int idCategory = cbxSearchCategory.getSelectedIndex();
+            int categoryId = cbxSearchCategory.getSelectedIndex();
 
             DefaultTableModel model = new DefaultTableModel();
 
@@ -487,16 +477,16 @@ public class Main extends javax.swing.JFrame {
             });
 
             productsTable.setModel(model);
-            ArrayList<Product> products = controller.searchProductByCategory(idCategory);
+            ArrayList<Product> products = controller.listProductsByCategory(categoryId);
 
             if (!products.isEmpty()) {
-                hideLabel();
+                hideWarnings();
                 for (Product product : products) {
                     model.addRow(new Object[]{
                         product.getCode(),
                         product.getName(),
                         product.getDistributor(),
-                        product.getCategory().getCategoryName(),
+                        product.getCategory().getName(),
                         product.getPrice()
 
                     });
@@ -504,12 +494,12 @@ public class Main extends javax.swing.JFrame {
             } else {
 
                 cleanTable();
-                showLabel();
+                showWarnings();
             }
 
         } else {
-            fillTable();
-            hideLabel();
+            fillProductsTable();
+            hideWarnings();
         }
     }//GEN-LAST:event_cbxSearchCategoryItemStateChanged
 
@@ -518,10 +508,10 @@ public class Main extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_lblCategoriesManagementMouseClicked
 
-    private void fillTable() {
+    private void fillProductsTable() {
         DefaultTableModel model = new DefaultTableModel();
 
-        ArrayList<Product> products = controller.listProducts();
+        ArrayList<Product> products = controller.listAllProducts();
         model.setColumnIdentifiers(new Object[]{
             "Código", "Nombre", "Distribuidor", "Categoría", "Precio"
         });
@@ -533,22 +523,19 @@ public class Main extends javax.swing.JFrame {
                 product.getCode(),
                 product.getName(),
                 product.getDistributor(),
-                product.getCategory().getCategoryName(),
+                product.getCategory().getName(),
                 product.getPrice()
             });
         }
     }
 
-    /**
-     * Reestablece los valores de búsqueda y limpia los campos de texto.
-     */
     private void cleanFields() {
         txtCode.setText("");
         txtName.setText("");
         txtDistributor.setText("");
-        cbxCategory.setSelectedIndex(0);
         txtPrice.setText("");
         txtFilter.setText("");
+        cbxCategory.setSelectedIndex(0);
     }
 
     private void cleanTable() {
@@ -556,11 +543,6 @@ public class Main extends javax.swing.JFrame {
         model.setRowCount(0);
     }
 
-    /**
-     * Método para verificar si existen campos vacíos.
-     *
-     * @return true si hay campos sin llenar, false en caso contrario.
-     */
     private boolean hasEmptyFields() {
         return (txtCode.getText().isEmpty() || txtName.getText().isEmpty() || txtDistributor.getText().isEmpty()
                 || cbxCategory.getSelectedIndex() == 0 || txtPrice.getText().isEmpty());
@@ -571,74 +553,38 @@ public class Main extends javax.swing.JFrame {
         cbxCategory.setModel(model);
         cbxSearchCategory.setModel(model);
 
-        ArrayList<Category> categories = controller.getAllCategories();
-        model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
+        ArrayList<Category> categories = controller.listAllCategories();
+        model.addElement("Seleccione una categoría"); 
 
         for (Category category : categories) {
-            model.addElement(category.getCategoryName()); // Agrega los nombres de las categorías al ComboBoxModel
+            model.addElement(category.getName()); 
         }
     }
 
-    private void setCbxSearchCategory() {
+    private void setCbxCategoryFilter() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cbxSearchCategory.setModel(model);
 
-        ArrayList<Category> categories = controller.getAllCategories();
-        model.addElement("Seleccione una categoría"); // Agrega la opción predeterminada
+        ArrayList<Category> categories = controller.listAllCategories();
+        model.addElement("Seleccione una categoría"); 
 
         for (Category category : categories) {
-            model.addElement(category.getCategoryName()); // Agrega los nombres de las categorías al ComboBoxModel
+            model.addElement(category.getName()); 
         }
     }
 
-    private void hideLabel() {
+    private void hideWarnings() {
         lblWarning.setVisible(false);
     }
 
-    private void showLabel() {
+    private void showWarnings() {
         lblWarning.setVisible(true);
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new Main().setVisible(true);
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane backgroundPanel;

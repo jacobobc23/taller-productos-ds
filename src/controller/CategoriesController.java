@@ -7,35 +7,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Category;
 import org.mariadb.jdbc.Connection;
-import singleton.Singleton;
+import db.DBConnection;
 
 /**
  *
- * @author Jacobo-bc
+ * @author jacobobc
  */
-public class CategoriesManagementController {
+public class CategoriesController {
 
     private final Connection con;
 
-    public CategoriesManagementController() {
-        con = Singleton.getINSTANCE().getConnection();
+    public CategoriesController() {
+        con = DBConnection.getINSTANCE().getConnection();
     }
 
-    public ArrayList<Category> listCategories() {
+    public ArrayList<Category> listAllCategories() {
         ArrayList<Category> categories = new ArrayList<>();
 
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
+        String sql = "SELECT * FROM categories";
 
-            String query = "SELECT * FROM categorias";
-
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("nombreCategoria");
+                String name = rs.getString("name");
 
                 Category category = new Category(id, name);
                 categories.add(category);
@@ -46,24 +42,17 @@ public class CategoriesManagementController {
         return categories;
     }
 
-    public Category searchCategory(String name) {
-        try {
-            PreparedStatement ps;
-            ResultSet rs;
+    public Category selectCategory(String name) {
+        String sql = "SELECT * FROM categories WHERE name = ?";
 
-            String query = "SELECT id, nombreCategoria FROM categorias WHERE nombreCategoria = ?";
-
-            ps = con.prepareStatement(query);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, name);
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 int id = rs.getInt("id");
-                String categoryName = rs.getString("nombreCategoria");
 
-                Category category = new Category(id, categoryName);
-
-                return category;
+                return new Category(id, name);
             }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
@@ -71,16 +60,12 @@ public class CategoriesManagementController {
         return null;
     }
 
-    public void addCategory(Category category) throws SQLException {
-        try {
-            PreparedStatement ps;
+    public void insertCategory(Category category) throws SQLException {
+        String sql = "INSERT INTO categories (id, name) VALUES (?, ?)";
 
-            String query = "INSERT INTO categorias (id, nombreCategoria) VALUES (?, ?)";
-
-            ps = con.prepareStatement(query);
-
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, category.getId());
-            ps.setString(2, category.getCategoryName());
+            ps.setString(2, category.getName());
 
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -90,12 +75,9 @@ public class CategoriesManagementController {
     }
 
     public void updateCategory(int id, String name) throws SQLException {
-        try {
-            PreparedStatement ps;
+        String sql = "UPDATE categories SET name = ? WHERE id = ?";
 
-            String query = "UPDATE categorias SET nombreCategoria = ? WHERE id = ?";
-
-            ps = con.prepareStatement(query);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setInt(2, id);
 
@@ -107,12 +89,9 @@ public class CategoriesManagementController {
     }
 
     public void deleteCategory(int id) {
-        try {
-            PreparedStatement ps;
+        String sql = "DELETE FROM categories WHERE id = ? AND NOT EXISTS (SELECT 1 FROM products WHERE category_id = ?)";
 
-            String query = "DELETE FROM categorias WHERE id = ? AND NOT EXISTS (SELECT 1 FROM productos WHERE id_categoria = ?)";
-
-            ps = con.prepareStatement(query);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.setInt(2, id);
 

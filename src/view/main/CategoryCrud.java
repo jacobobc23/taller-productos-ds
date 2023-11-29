@@ -1,6 +1,6 @@
 package view.main;
 
-import controller.CategoriesManagementController;
+import controller.CategoriesController;
 import exceptions.ProductCategoryException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import model.Category;
  */
 public class CategoryCrud extends javax.swing.JFrame {
 
-    private final CategoriesManagementController controller;
+    private final CategoriesController controller;
 
     /**
      * Creates new form CategoryCrud
@@ -24,7 +24,7 @@ public class CategoryCrud extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Categorias");
-        controller = new CategoriesManagementController();
+        controller = new CategoriesController();
         fillTable();
     }
 
@@ -250,7 +250,7 @@ public class CategoryCrud extends javax.swing.JFrame {
             return;
         }
 
-        Category category = controller.searchCategory(name);
+        Category category = controller.selectCategory(name);
         if (category != null) {
             JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre");
             return;
@@ -258,7 +258,7 @@ public class CategoryCrud extends javax.swing.JFrame {
 
         try {
             Category newCategory = new Category(name);
-            controller.addCategory(newCategory);
+            controller.insertCategory(newCategory);
             JOptionPane.showMessageDialog(null, "Categoría registrada correctamente");
             fillTable();
             cleanFields();
@@ -335,12 +335,12 @@ public class CategoryCrud extends javax.swing.JFrame {
         });
 
         categoriesTable.setModel(model);
-        Category category = controller.searchCategory(name);
+        Category category = controller.selectCategory(name);
 
         if (category != null) {
             model.addRow(new Object[]{
                 category.getId(),
-                category.getCategoryName()
+                category.getName()
             });
         } else {
             JOptionPane.showMessageDialog(null, "Categoría no encontrada");
@@ -366,7 +366,7 @@ public class CategoryCrud extends javax.swing.JFrame {
     private void fillTable() {
         DefaultTableModel model = new DefaultTableModel();
 
-        ArrayList<Category> categories = controller.listCategories();
+        ArrayList<Category> categories = controller.listAllCategories();
         model.setColumnIdentifiers(new Object[]{
             "ID", "Nombre"
         });
@@ -376,7 +376,7 @@ public class CategoryCrud extends javax.swing.JFrame {
         for (Category category : categories) {
             model.addRow(new Object[]{
                 category.getId(),
-                category.getCategoryName()
+                category.getName()
             });
         }
 
